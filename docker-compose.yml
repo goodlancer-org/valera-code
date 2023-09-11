@@ -1,0 +1,17 @@
+version: '3.9'
+services: 
+    jupyter:
+        build: 
+            context: .
+        privileged: true
+        user: 1000:44
+        ports: 
+            - 80:8888
+        environment:
+            JUPYTER_ENABLE_LAB: "yes"
+        #devices:
+        #    - '/dev/video0:/dev/video0'
+        volumes: 
+            - ./notebooks:/home/jovyan/work
+        command: 
+            "start-notebook.sh --NotebookApp.token='Valera'"            
