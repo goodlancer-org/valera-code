@@ -2,18 +2,29 @@ version: '3.9'
 services: 
     jupyter:
         build: 
-            context: .
+            context: Jupyterlab/.
         privileged: true
-        #user: 1000:0
         user: root
         ports: 
             - 80:8888
         environment:
             JUPYTER_ENABLE_LAB: "yes"
             GRANT_SUDO: "yes"
-        #devices:
-        #    - '/dev/video0:/dev/video0'
         volumes: 
-            - ./notebooks:/home/jovyan/work
+            - ./Jupyterlab/notebooks:/home/jovyan/work
+            - ./Solara/app:/home/jovyan/solara-app
         command: 
-            "start-notebook.sh --NotebookApp.token=''"            
+            "start-notebook.sh --NotebookApp.token=''"  
+    ros2:
+        image: ros:iron-ros-core  
+        privileged: true
+        command: 
+            "tail -f /dev/null"   
+    solara:
+        build: 
+            context: Solara/.  
+        ports:
+            - 8080:80
+        volumes:
+            - ./Solara/app:/home/solara-app
+      
