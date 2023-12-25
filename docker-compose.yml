@@ -1,6 +1,7 @@
 version: '3.9'
 services: 
     jupyter:
+        container_name: jupyter
         build: 
             context: Jupyterlab/.
         privileged: true
@@ -12,19 +13,20 @@ services:
             GRANT_SUDO: "yes"
         volumes: 
             - ./Jupyterlab/notebooks:/home/jovyan/work
-            - ./Solara/app:/home/jovyan/solara-app
+            - ./Face_Web/app:/home/jovyan/solara-app
         command: 
             "start-notebook.sh --NotebookApp.token=''"  
-    ros2:
-        image: ros:iron-ros-core  
-        privileged: true
-        command: 
-            "tail -f /dev/null"   
-    solara:
+    robot:
+        container_name: robot
+        build:
+            context: Robot/.
+        privileged: true  
+    face_web:
+        container_name: face_web
         build: 
-            context: Solara/.  
+            context: Face_Web/.  
         ports:
             - 8080:80
         volumes:
-            - ./Solara/app:/home/solara-app
+            - ./Face_Web/app:/home/solara-app
       
