@@ -14,13 +14,24 @@ services:
         volumes: 
             - ./Jupyterlab/notebooks:/home/jovyan/work
             - ./Face_Web/app:/home/jovyan/solara-app
+            - ./Robot/workspaces:/home/jovyan/workspaces
         command: 
             "start-notebook.sh --NotebookApp.token=''"  
     robot:
         container_name: robot
         build:
             context: Robot/.
-        privileged: true  
+            args:
+                ROS_DISTRO: iron       
+        privileged: true     
+        volumes:
+            - ./Robot/workspaces:/home/workspaces
+        working_dir: /home/workspaces/main_ws
+        entrypoint: ./ros2_entrypoint.sh
+        command: >
+            sh -c   
+            '/usr/sbin/sshd -D'
+        #    'ros2 launch src/valera/launch/valera.launch.py &  
     face_web:
         container_name: face_web
         build: 
